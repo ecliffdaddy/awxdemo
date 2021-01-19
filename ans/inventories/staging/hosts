@@ -1,0 +1,7 @@
+[ansible-srv]
+hope-1
+#grace-1
+
+[small-server]
+instance-1
+#instance-2

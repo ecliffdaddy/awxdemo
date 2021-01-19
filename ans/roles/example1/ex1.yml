@@ -1,0 +1,61 @@
+- name: update web servers
+  #  hosts: all
+  hosts: ansible-srv
+  #remote_user: root
+  become: yes
+  become_user: root
+
+  tasks:
+  - name: "ensure python,wget.... are at latest version"
+    yum:
+      name:
+             python,python-devel,wget,git,gcc,gcc-c++,nodejs,gettext,device-mapper-persistent-data,lvm2,bzip2,python-pip
+      state: latest
+
+  - name: Copy file with owner and permission
+    copy:
+        src: /home/ansible/ans/roles/example1/files/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo 
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+        backup: yes
+
+  - name: "ensure docker-ce are at the latest version"
+    yum:
+      name:
+            docker-ce
+      state: latest
+
+  - name: "enable and start docker.service"
+    service:
+      name: docker.service
+      enabled: yes
+
+  - name: Install docker-compose python package
+    pip:
+       name: docker-compose
+
+      #- name: ensure apache is at the latest version
+      #yum:
+      #name: httpd
+      #state: latest
+
+      #- name: write the apache confiig file
+      #template:
+      #src: /srv/httpd.j2
+      #dest: /etc/httpd.conf
+
+      #- name: update db servers
+      #hosts: databases
+      #remote_user: root
+
+      #tasks:
+      #- name: ensure postgresql is at the latest version
+      #yum:
+      #name: postgresql
+      #state: latest
+      #- name: ensure that postgresql is started
+      #service:
+      #name: postgresql
+      #state: started
